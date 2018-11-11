@@ -22,6 +22,7 @@ public class Polynom implements Polynom_able{
 	private ArrayList<Monom> Polynom_able;	
 
 	//Constructors
+	
 	/** 
 	 * Zero Constructor : builds a new empty Polynom
 	 */	
@@ -31,14 +32,14 @@ public class Polynom implements Polynom_able{
 	}
 
 	/**
-	 *   Copy Constructor : deep copy, builds a new Polynom
-	 *   @param other get the Monoms from other Polynom and them in this Polynom
+	 *  Copy Constructor : deep copy, builds a new Polynom
+	 *  @param other get the Monoms from other Polynom and them in this Polynom
 	 */
 
-	public Polynom(Polynom other) {
+	public Polynom(Polynom other)  throws Exception{
 		Polynom_able= new ArrayList<>();
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter = other.iterator();
+		Iterator<Monom> p_iter = other.iteretor();
 		// While the other Polynom has Monoms, add the Monoms to this Polynom
 		while (p_iter.hasNext()) {
 			Monom current= new Monom(p_iter.next());
@@ -49,22 +50,35 @@ public class Polynom implements Polynom_able{
 	/** 
 	 *  String Constructor : builds a new Polynom,
 	 *  Get String as input and change it to Polynom
-	 *  @param p proper input f(x) = a_1X^b_1 + a_2*X^b_2 ... a_n*Xb_n
+	 *  @param p proper input f(x) = a_1x^b_1 + a_2*x^b_2 ... a_n*xb_n
 	 */
 
-	public Polynom(String p) {
-		Polynom PolynomNew=new Polynom();
-		// Split helps us to separate the various Monoms
-		String[]s=p.split(" \\+ ");
-		for (int i=0; i<s.length; i++) {
-			// Saves the Monoms values and adds to the this Polynom
-			Monom newM=new Monom(s[i]);
-			PolynomNew.add(newM);
+	public Polynom(String p) throws Exception{
+		// throws exception if the Polynom equal to null
+		if (p==null)
+			throw new Exception("String is null");
+		else {
+			Polynom PolynomNew=new Polynom();
+			// Replaces the string marks so that the string matches the Monom constructor
+			p=p.replaceAll("[(,), ]","");
+			p=p.replaceAll("[-]", "+-");
+			p=p.replaceAll("[+]"+"[+]", "+");
+			if (p.charAt(0)=='+') {
+				p=p.replaceFirst("[+]", "");
+			}
+			// Split makes separation between Monoms
+			String[]s=p.split("\\+");
+			for (int i=0; i<s.length; i++) {
+				// Saves the Monoms values and adds to the this Polynom
+				Monom newM=new Monom(s[i]);
+				PolynomNew.add(newM);
+			}
+			this.Polynom_able=PolynomNew.Polynom_able;
 		}
-		this.Polynom_able=PolynomNew.Polynom_able;
 	}
 
 	//Methods
+	
 	/**
 	 * This method add other Polynom to this Polynom.
 	 * Does not contain two Monoms with the same power,
@@ -72,9 +86,9 @@ public class Polynom implements Polynom_able{
 	 * @param p1 all the Monoms in other Polynom
 	 */
 	@Override
-	public void add(Polynom_able p1) {
+	public void add(Polynom_able p1)  throws Exception {
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter=p1.iterator();
+		Iterator<Monom> p_iter=p1.iteretor();
 		//While the other Polynom has Monoms add them to this Polynom
 		while (p_iter.hasNext() ) {
 			Monom current=p_iter.next();
@@ -89,12 +103,12 @@ public class Polynom implements Polynom_able{
 	 * @param m1 the Monom's coefficient and power
 	 */
 	@Override
-	public void add(Monom m1) {
+	public void add(Monom m1) throws Exception {
 		// Checking if the Monom is not equal to 0
 		if (m1.get_coefficient()!=0) {
 			boolean flag= true;
 			// The iterator help us to go through the Polynom
-			Iterator<Monom> p_iter=this.iterator();
+			Iterator<Monom> p_iter=this.iteretor();
 			// Go over the Polynom and see if there is a Monom with the same power as m1
 			while (p_iter.hasNext() && flag ) {
 				Monom current=p_iter.next();
@@ -119,9 +133,9 @@ public class Polynom implements Polynom_able{
 	 * @param p1 all the Monoms in other Polynom
 	 */
 	@Override
-	public void subtract(Polynom_able p1) {
+	public void substract(Polynom_able p1) throws Exception {
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter=p1.iterator();
+		Iterator<Monom> p_iter=p1.iteretor();
 		while (p_iter.hasNext() ) {
 			Monom current=p_iter.next();
 			// Subtract from this Polynom the Monoms from other Polynom
@@ -133,10 +147,11 @@ public class Polynom implements Polynom_able{
 	 * This method subtract Monom from this Polynom
 	 * @param m1 the Monom's coefficient and power
 	 */
-	public void subtract(Monom m1) {
+	
+	public void subtract(Monom m1) throws Exception{
 		boolean flag= true;
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter=this.iterator();
+		Iterator<Monom> p_iter=this.iteretor();
 		// Go over the Polynom and see if there is a Monom with the same power as m1
 		while (p_iter.hasNext() && flag ) {
 			Monom current=p_iter.next();
@@ -164,14 +179,12 @@ public class Polynom implements Polynom_able{
 	 * Multiply all the Monoms is this Polynom by the Monoms in the other Polynom
 	 * @param p1 all the Monoms in other Polynom
 	 */
-	/* (non-Javadoc)
-	 * @see myMath.Polynom_able#multiply(myMath.Polynom_able)
-	 */
+
 	@Override
-	public void multiply(Polynom_able p1) {
+	public void multiply(Polynom_able p1) throws Exception {
 		// Create two iterators one to go through this Polynom and one to go through other Polynom
 		Iterator<Monom> p_iter; 
-		Iterator<Monom> this_iter=this.iterator(); // The iterator of this Polynom
+		Iterator<Monom> this_iter=this.iteretor(); // The iterator of this Polynom
 
 		Polynom copy_polynom=  new Polynom(); // Place to put the values after multiplying them
 		ArrayList<Monom> copy_polynom2=  new ArrayList<Monom>();
@@ -180,7 +193,7 @@ public class Polynom implements Polynom_able{
 		while (this_iter.hasNext()) {
 			// thiscurrent represent the current Monom from this Polynom
 			Monom thiscurrent=this_iter.next();
-			p_iter=p1.iterator(); // The iterator of other Polynom
+			p_iter=p1.iteretor(); // The iterator of other Polynom
 			// Passes all the Monoms in other Polynom
 			while (p_iter.hasNext()) {
 				// Put the Monom from this Polynom in temporary variable
@@ -194,7 +207,7 @@ public class Polynom implements Polynom_able{
 			}
 		}
 		// The iterator help us to go through the copy_polynom
-		Iterator<Monom> copy= copy_polynom.iterator();
+		Iterator<Monom> copy= copy_polynom.iteretor();
 		// transfers the Monoms form the Polynom to the ArrayList
 		while(copy.hasNext())
 			copy_polynom2.add(copy.next());
@@ -209,11 +222,12 @@ public class Polynom implements Polynom_able{
 	 * @param p1 all the Monoms in other Polynom
 	 * @return true : if this Polynom represents the same function or false : otherwise
 	 */
+	
 	@Override
-	public boolean equals (Polynom_able p1) {
+	public boolean equals (Polynom_able p1) throws Exception{
 		// Create two iterators one to go through this Polynom and one to go through other Polynom
-		Iterator<Monom> p_iter=p1.iterator();
-		Iterator<Monom> this_iter=this.iterator();
+		Iterator<Monom> p_iter=p1.iteretor();
+		Iterator<Monom> this_iter=this.iteretor();
 		//While the both Polynom still have Monoms
 		while (this_iter.hasNext() && p_iter.hasNext()) {
 			Monom thiscurrent= new Monom (this_iter.next());
@@ -253,7 +267,7 @@ public class Polynom implements Polynom_able{
 	 * @return mid
 	 */
 	@Override
-	public double root(double x0, double x1, double eps) {
+	public double root(double x0, double x1, double eps) throws Exception {
 
 		double mid=0;
 
@@ -281,7 +295,7 @@ public class Polynom implements Polynom_able{
 	 * @return newp deep copy of this Polynum
 	 */
 	@Override
-	public Polynom_able copy() {
+	public Polynom_able copy()  throws Exception {
 		Polynom_able newp= new Polynom() ;
 		newp.add(this);
 		return newp;
@@ -293,11 +307,11 @@ public class Polynom implements Polynom_able{
 	 * @return newp derivative version of this Polynom
 	 */
 	@Override
-	public Polynom_able derivative() {
+	public Polynom_able derivative() throws Exception{
 		// Create a new Polynom in order to contain the derivative Monoms
 		Polynom_able newp= new Polynom();
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter=this.iterator();
+		Iterator<Monom> p_iter=this.iteretor();
 		//Passes all the Monoms in this Polynom
 		while (p_iter.hasNext() ) {
 			Monom current=p_iter.next();
@@ -317,14 +331,14 @@ public class Polynom implements Polynom_able{
 	 * @return the approximated area above the x-axis below this Polynom and between the [x0,x1] range.
 	 */
 	@Override
-	public double area(double x0,double x1, double eps) {
+	public double area(double x0,double x1, double eps) throws Exception {
 		// Epsilon can't be a negative number or equal to 0 
-		while (eps<=0) {
-			Scanner scan = new Scanner(System.in);
-			System.out.println("Wrong input. enter eps that > 0");
-			eps=scan.nextInt();
-		}
+		if (eps<=0)
+			throw new Exception("eps need to be bigger than zero");
 		// n is the number of rectangles
+		else if (x0>x1)
+			throw new Exception("x1 should be bigger than x0");
+		
 		int n=(int)((x1-x0)/eps);
 		double sum=0;
 		for (int i=1; i<=n; i++) {
@@ -341,7 +355,7 @@ public class Polynom implements Polynom_able{
 	 * @return Iterator
 	 */
 	@Override
-	public Iterator<Monom> iterator(){
+	public Iterator<Monom> iteretor(){
 		Iterator<Monom> iter= Polynom_able.iterator();
 		return iter;
 	}
@@ -356,7 +370,7 @@ public class Polynom implements Polynom_able{
 		else {
 			String polynom=new String("");
 			// The iterator help us to go through the Polynom
-			Iterator<Monom> print_iter = this.iterator();
+			Iterator<Monom> print_iter = this.iteretor();
 			while (print_iter.hasNext()) {
 				// Prints the Monoms
 				polynom=polynom+(print_iter.next()).toString();
@@ -376,9 +390,9 @@ public class Polynom implements Polynom_able{
 	 */
 
 	@Override
-	public double f(double x) {
+	public double f(double x) throws Exception{
 		// The iterator help us to go through the Polynom
-		Iterator<Monom> iter = this.iterator();
+		Iterator<Monom> iter = this.iteretor();
 		// Count the value of all the Monoms together
 		double sum=0;
 		while(iter.hasNext()) {

@@ -24,7 +24,7 @@ import java.util.Iterator;
  * 3.3 double f(x) // return this Polygon value at p(x) 
  * 3.4 boolean equals(Polygon p) // returns true iff for any x: this.f(x) == p.f(x)
  * 3.5 double root(double x0, double x1, double eps) // assuming (f(x0)*f(x1)<=0, returns f(x2) such that:
- *													//	(i) x0<=x2<=x2 & (ii) {f(x2)<eps
+ *	(i) x0<=x2<=x2 & (ii) {f(x2)<eps
  * 3.6 String toString() // returns a String such that it can be used for init an equal(s) Polygon
  *													
  * 
@@ -36,32 +36,37 @@ public interface Polynom_able extends cont_function{
 	/**
 	 * Add p1 to this Polynom
 	 * @param p1
+	 * @throws Exception 
 	 */
-	public void add(Polynom_able p1);
+	public void add(Polynom_able p1) throws Exception;
 	/**
 	 * Add m1 to this Polynom
 	 * @param m1 Monom
+	 * @throws Exception 
 	 */
-	public void add(Monom m1);
+	public void add(Monom m1) throws Exception;
 	/**
 	 * Subtract p1 from this Polynom
 	 * @param p1
+	 * @throws Exception 
 	 */
-	public void subtract(Polynom_able p1);
+	public void substract(Polynom_able p1) throws Exception;
 	/**
 	 * Multiply this Polynom by p1
 	 * @param p1
+	 * @throws Exception 
 	 */
-	public void multiply(Polynom_able p1);
+	public void multiply(Polynom_able p1) throws Exception;
 	/**
 	 * Test if this Polynom is logically equals to p1.
 	 * @param p1
 	 * @return true iff this pulynom represents the same function ans p1
+	 * @throws Exception 
 	 */
-	public boolean equals (Polynom_able p1);
+	public boolean equals (Polynom_able p1) throws Exception;
 	/**
 	 * Test if this is the Zero Polynom
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isZero();
 	/**
@@ -71,28 +76,32 @@ public interface Polynom_able extends cont_function{
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps step (positive) value
-	 * @return
+	 * @return 
+	 * @throws Exception 
 	 */
-	public double root(double x0, double x1, double eps);
+	public double root(double x0, double x1, double eps) throws Exception;
 	/**
 	 * create a deep copy of this Polynum
 	 * @return 
+	 * @throws Exception 
 	 */
-	public Polynom_able copy();
+	public Polynom_able copy() throws Exception;
 	/**
 	 * Compute a new Polynom which is the derivative of this Polynom
 	 * @return
+	 * @throws Exception 
 	 */
-	public Polynom_able derivative();
+	public Polynom_able derivative() throws Exception;
 	/**
 	 * Compute Riemann's Integral over this Polynom starting from x0, till x1 using eps size steps,
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
 	 * @return the approximated area above the x-axis below this Polynom and between the [x0,x1] range.
+	 * @throws Exception 
 	 */
-	public double area(double x0,double x1, double eps);
+	public double area(double x0,double x1, double eps) throws Exception;
 	/**
 	 * @return an Iterator (of Monoms) over this Polynom
 	 * @return
 	 */
-	public Iterator<Monom> iterator();
+	public Iterator<Monom> iteretor();
 }

@@ -12,6 +12,7 @@ public interface cont_function extends function{
 	 * @param x1 end point
 	 * @param eps positive step value
 	 * @return the approximated area above X-axis below this function bounded in the range of [x0,x1]
+	 * @throws Exception 
 	 */
-	public double area(double x0, double x1, double eps);
+	public double area(double x0, double x1, double eps) throws Exception;
 }
