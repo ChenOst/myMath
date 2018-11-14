@@ -22,7 +22,7 @@ public class Polynom implements Polynom_able{
 	private ArrayList<Monom> Polynom_able;	
 
 	//Constructors
-	
+
 	/** 
 	 * Zero Constructor : builds a new empty Polynom
 	 */	
@@ -34,6 +34,7 @@ public class Polynom implements Polynom_able{
 	/**
 	 *  Copy Constructor : deep copy, builds a new Polynom
 	 *  @param other get the Monoms from other Polynom and them in this Polynom
+	 *  @throws Exception if one of the Monoms in the Polynom have power the lower than zero
 	 */
 
 	public Polynom(Polynom other)  throws Exception{
@@ -50,24 +51,26 @@ public class Polynom implements Polynom_able{
 	/** 
 	 *  String Constructor : builds a new Polynom,
 	 *  Get String as input and change it to Polynom
-	 *  @param p proper input f(x) = a_1x^b_1 + a_2*x^b_2 ... a_n*xb_n
+	 *  @param polynom proper input f(x) = a_1x^b_1 + a_2*x^b_2 ... a_n*xb_n
+	 *  @throws Exception if the Polynom equals to null
+	 *  @throws Exception if the Polynom contains invalid signs
 	 */
 
-	public Polynom(String p) throws Exception{
+	public Polynom(String polynom) throws Exception{
 		// throws exception if the Polynom equal to null
-		if (p==null)
+		if (polynom==null)
 			throw new Exception("String is null");
 		else {
 			Polynom PolynomNew=new Polynom();
 			// Replaces the string marks so that the string matches the Monom constructor
-			p=p.replaceAll("[(,), ]","");
-			p=p.replaceAll("[-]", "+-");
-			p=p.replaceAll("[+]"+"[+]", "+");
-			if (p.charAt(0)=='+') {
-				p=p.replaceFirst("[+]", "");
+			polynom=polynom.replaceAll("[(,), ]","");
+			polynom=polynom.replaceAll("[-]", "+-");
+			polynom=polynom.replaceAll("[+]"+"[+]", "+");
+			if (polynom.charAt(0)=='+') {
+				polynom=polynom.replaceFirst("[+]", "");
 			}
 			// Split makes separation between Monoms
-			String[]s=p.split("\\+");
+			String[]s=polynom.split("\\+");
 			for (int i=0; i<s.length; i++) {
 				// Saves the Monoms values and adds to the this Polynom
 				Monom newM=new Monom(s[i]);
@@ -78,12 +81,13 @@ public class Polynom implements Polynom_able{
 	}
 
 	//Methods
-	
+
 	/**
 	 * This method add other Polynom to this Polynom.
 	 * Does not contain two Monoms with the same power,
 	 * If the Monom equal to 0 don't add it
 	 * @param p1 all the Monoms in other Polynom
+	 * @throws Exception if one of the Monoms in the Polynom have power the lower than zero
 	 */
 	@Override
 	public void add(Polynom_able p1)  throws Exception {
@@ -101,6 +105,7 @@ public class Polynom implements Polynom_able{
 	 * Add two Monoms with the same power in order to avoid duplication,
 	 * If the Monom equal to 0 don't add it
 	 * @param m1 the Monom's coefficient and power
+	 * @throws Exception if the Monom have power that lower than zero
 	 */
 	@Override
 	public void add(Monom m1) throws Exception {
@@ -131,6 +136,7 @@ public class Polynom implements Polynom_able{
 	/**
 	 * This method subtract other Polynom from this Polynom
 	 * @param p1 all the Monoms in other Polynom
+	 * @throws Exception if one of the Monoms in the Polynom have power that lower than zero
 	 */
 	@Override
 	public void substract(Polynom_able p1) throws Exception {
@@ -146,8 +152,9 @@ public class Polynom implements Polynom_able{
 	/**
 	 * This method subtract Monom from this Polynom
 	 * @param m1 the Monom's coefficient and power
+	 * @throws Exception if the Monom have power that lower than zero
 	 */
-	
+
 	public void subtract(Monom m1) throws Exception{
 		boolean flag= true;
 		// The iterator help us to go through the Polynom
@@ -178,6 +185,7 @@ public class Polynom implements Polynom_able{
 	 * This method multiply this Polynom by other Polynom,
 	 * Multiply all the Monoms is this Polynom by the Monoms in the other Polynom
 	 * @param p1 all the Monoms in other Polynom
+	 * @throws Exception if one of the Monoms in the Polynom have power that lower than zero
 	 */
 
 	@Override
@@ -221,8 +229,9 @@ public class Polynom implements Polynom_able{
 	 * This method check if this Polynom is logically equals to other Polynom
 	 * @param p1 all the Monoms in other Polynom
 	 * @return true : if this Polynom represents the same function or false : otherwise
+	 * @throws Exception if one of the Monoms in the Polynom have power that lower than zero
 	 */
-	
+
 	@Override
 	public boolean equals (Polynom_able p1) throws Exception{
 		// Create two iterators one to go through this Polynom and one to go through other Polynom
@@ -260,31 +269,40 @@ public class Polynom implements Polynom_able{
 	 * Compute a value of x (x bigger or equal to x0 and x smaller or equal to x1,
 	 * for f(x) smaller than eps),
 	 * assuming that(f(x0)*f(x1)) smaller or equal to 0, returns f(x2) such that:
-	 * (i) x0 bigger or equal to x1 bigger or equal to x2 and (ii) f(x2) smaller then eps
+	 * (i) x0 bigger or equal to x1 bigger or equal to x2 and (ii) f(x2) smaller than eps
 	 * @param x0 starting point
 	 * @param x1 end point
 	 * @param eps step (positive) value
+	 * @throws Exception if epsilon is negative number
+	 * @throws Exception if the range is invalid
 	 * @return mid
 	 */
 	@Override
 	public double root(double x0, double x1, double eps) throws Exception {
-
 		double mid=0;
-
-		while ( (x1-x0) > eps )
-		{
-			mid=((x1+x0)/2);          
-			// Calculate the value of the Polynom at mid
-			double f_mid=this.f(mid);
-			// Calculate the value of the Polynom at x0
-			double f_x0=this.f(x0);
-			// f(x0) and f(mid) have different signs: move b
-			if ( (f_mid > 0 && f_x0 < 0) || (f_mid < 0 && f_x0 > 0) ){
-				x1 = mid;
-			}
-			// f(x0) and f(mid) have same signs: move a
-			else{  
-				x0 = mid;
+		// epsilon have to be bigger than zero
+		if (eps<=0)
+			throw new Exception("eps need to be bigger than zero");
+		// x0 can't be bigger than x1
+		else if (x0>x1)
+			throw new Exception("x1 should be bigger than x0");
+		// All the values are legal
+		else { 
+			while ( (x1-x0) > eps )
+			{
+				mid=((x1+x0)/2);          
+				// Calculate the value of the Polynom at mid
+				double f_mid=this.f(mid);
+				// Calculate the value of the Polynom at x0
+				double f_x0=this.f(x0);
+				// f(x0) and f(mid) have different signs: move b
+				if ( (f_mid > 0 && f_x0 < 0) || (f_mid < 0 && f_x0 > 0) ){
+					x1 = mid;
+				}
+				// f(x0) and f(mid) have same signs: move a
+				else{  
+					x0 = mid;
+				}
 			}
 		}
 		return mid;
@@ -293,6 +311,7 @@ public class Polynom implements Polynom_able{
 	/**
 	 * This method create a deep copy of this Polynum
 	 * @return newp deep copy of this Polynum
+	 * @throws Exception if one of the Monoms have power the lower than zero
 	 */
 	@Override
 	public Polynom_able copy()  throws Exception {
@@ -305,6 +324,7 @@ public class Polynom implements Polynom_able{
 	 * This method derivative this Polynom,
 	 * Change this Polynom to the derivative of this Polynom
 	 * @return newp derivative version of this Polynom
+	 * @throws Exception if one of the Monoms have power the lower than zero
 	 */
 	@Override
 	public Polynom_able derivative() throws Exception{
@@ -329,27 +349,56 @@ public class Polynom implements Polynom_able{
 	 * Compute Riemann's Integral over this Polynom starting from x0, till x1 using eps size steps,
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
 	 * @return the approximated area above the x-axis below this Polynom and between the [x0,x1] range.
+	 * @throws Exception if epsilon is negative number
+	 * @throws Exception if the range is invalid
+	 * @throws Exception if there is no cutting point with the X-axis
 	 */
 	@Override
 	public double area(double x0,double x1, double eps) throws Exception {
+		boolean flag=false;
+		double x;
+		// Checks if the Polynom cuts the X-axis
+		for (double i=x0; i<=x1; i+=0.001) {
+			if (this.f(i)==0) {
+				flag=true;
+			}
+		}
+		// Throw exception if the Polynom don't cuts the X-axis
+		if (flag)
+			throw new Exception("There is no cutting point with the X-axis");
 		// Epsilon can't be a negative number or equal to 0 
-		if (eps<=0)
+		else if (eps<=0)
 			throw new Exception("eps need to be bigger than zero");
-		// n is the number of rectangles
+		// x0 can't be bigger than x1
 		else if (x0>x1)
 			throw new Exception("x1 should be bigger than x0");
-		
-		int n=(int)((x1-x0)/eps);
-		double sum=0;
-		for (int i=1; i<=n; i++) {
-			double xi=x0+eps*(i-1);
-			// Calculate the value of x in the i place
-			double f=this.f(xi);
-			if (f>0)
-				sum=sum+f;
+		else {
+
+			int n=(int)((x1-x0)/eps);
+			double sum=0;
+			for (int i=1; i<=n; i++) {
+				double xi=x0+eps*(i-1);
+				// Calculate the value of x in the i place
+				double f=this.f(xi);
+				if(f >0) 
+					sum=sum+f;	
+				else 
+					sum=sum+negativeArea(f);
+			}
+			return sum*eps;
 		}
-		return sum*eps;
 	}
+
+	/**
+	 * Auxiliary function the calculates the area if its under the X-axis
+	 * @param f the negative value of the area
+	 * @return the approximated area under the x-axis under this Polynom and between the [x0,x1] range.
+	 * @throws Exception if there is no cutting point with the X-axis
+	 */
+	public double negativeArea(double f) throws Exception{
+		return Math.abs(f);
+	}
+
 	/**
 	 * This method help us to go through the Polynom
 	 * @return Iterator
@@ -387,6 +436,8 @@ public class Polynom implements Polynom_able{
 	 * This method get a real number and calculates the Polynom value
 	 * @param x the value of the number
 	 * @return the value of the Polynom at x
+	 * @throws Exception if the powers value is lower than zero
+	 * @throws Exception if the Monoms equals to null
 	 */
 
 	@Override
