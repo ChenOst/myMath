@@ -1,24 +1,23 @@
 package myMath;
+
 //
 import org.omg.Messaging.SyncScopeHelper;
 //
 public class Test {
 	public static void main(String[] args) throws Exception{
-/*	System.out.println("Monom test:");
-		Test_Monom();
+	
+        System.out.println("Monom test:");
+	    Test_Monom();
 		System.out.println("Polynom test:");
 		Test_Polynom();
-		*/
-		Polynom a=new Polynom("4X");
-		Polynom b=new Polynom("4*x^1");
-		Monom c=new Monom(4,1);
-		Polynom p3=new Polynom();
-		p3.add(c);
-		System.out.println(a.equals(b));
-		System.out.println(b.equals(p3));
-		System.out.println(p3.equals(a));
-		p3.area(1, 2, 5);
-
+		
+		Polynom p=new Polynom("x^2-1");
+		System.out.println(p.area(-1, 1, 0.01));
+		double a=0.75;
+		System.out.println(Math.floor(a*100)/100);
+		System.out.println(Math.floor(a));
+		
+		p.toPlot(-10, 10);
 	}
 
 	/**
@@ -104,40 +103,50 @@ public class Test {
 		//multiply:
 		System.out.println("multiply:\n");
 		System.out.println("e*h: need to get: (-5.75)*x^4 ");
+		
 		e.multiply(h);
 		System.out.println(e.toString());
 		System.out.println();
 		System.out.println("b*i: need to get: 5.55*x^8 ");
+	
 		b.multiply(i);
 		System.out.println(b.toString());
 		System.out.println();
 		Monom l=new Monom(0,0);
 		i.multiply(l);
 		System.out.println("i*l: need to get:0");
+	
 		System.out.println(i.toString());
 		System.out.println();
 
 		//subtract:
 		System.out.println("subtract:\n");
 		System.out.println("d-e: need to get: 10.95*x^4 ");
+		
 		d.subtract(e);
 		System.out.println(d);
 		System.out.println("c-c: need to get: 0 ");
+	
+
 		c.subtract(c);
 		System.out.println(c);
 		System.out.println("c-h: need to get: (2.3)*x ");
+	
 		c.subtract(h);
 		System.out.println(c);
 		System.out.println();
 
 		//derivative:
 		System.out.println("derivative:\n");
+		System.out.println("d:"+d.toString());
 		System.out.println("(d)': need to get: 43.8*x^3");
 		d.derivative();
 		System.out.println(d.toString());
+		System.out.println("c:"+c.toString());
 		System.out.println("(c)': need to get: 2.3");
 		c.derivative();
 		System.out.println(c.toString());
+		System.out.println("j:"+j.toString());
 		System.out.println("(j)': need to get: 0");
 		j.derivative();
 		System.out.println(j.toString());
@@ -203,6 +212,7 @@ public class Test {
 
 		//derivative:
 		System.out.println("derivative:\n");
+		
 		System.out.println("p2:"+p2.toString());
 		System.out.println();
 		System.out.println("p2': need to get: 28*x^3 + 19.2*x^2 + 10*x + 7");
@@ -309,11 +319,12 @@ public class Test {
 		//area:
 		System.out.println("area: \n");
 		Polynom p19=new Polynom("5*x^7 + 4*x^8");
-		System.out.println("p19.area(2,4,0.01):need to get 155374.399800205.");
-		System.out.println(p19.area(2, 4, 0.01));
+		System.out.println("p19.area(-2,0,0.25):need to get 155374.399800205.");
+		System.out.println(p19.area(-2, 0.5, 0.25));
 		System.out.println();
-		System.out.println("p17.area(4,10,0.04):need to get 1307.88476399054");
-		System.out.println(p17.area(4,10,0.04));
+		System.out.println("p17.area(-1,10,0.04):need to get 1307.88476399054");
+		System.out.println(p17.toString());
+		System.out.println(p17.area(-3,10,0.04));
 		System.out.println();
 
 	}

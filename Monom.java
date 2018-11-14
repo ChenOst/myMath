@@ -1,4 +1,3 @@
-
 package myMath;
 import java.util.Scanner;
 /**
@@ -248,6 +247,13 @@ public class Monom implements function{
 		return this.get_coefficient()+"*x^" +this.get_power();
 
 	}
+	
+	public boolean isEquals(Monom other) {
+		if (this.get_coefficient()==other.get_coefficient() && this.get_power()==other.get_power())
+			return true;
+		return false;
+
+	}
 
 	//Getters
 
@@ -258,12 +264,6 @@ public class Monom implements function{
 
 	public double get_coefficient() {
 		return _coefficient;
-	}
-	public boolean isEquals(Monom other) {
-		if (this.get_coefficient()==other.get_coefficient() && this.get_power()==other.get_power())
-			return true;
-		return false;
-
 	}
 
 	/**

@@ -64,6 +64,7 @@ public class Polynom implements Polynom_able{
 			Polynom PolynomNew=new Polynom();
 			// Replaces the string marks so that the string matches the Monom constructor
 			polynom=polynom.replaceAll("[(,), ]","");
+			polynom=polynom.replaceAll("[-]"+"[-]", "+");
 			polynom=polynom.replaceAll("[-]", "+-");
 			polynom=polynom.replaceAll("[+]"+"[+]", "+");
 			if (polynom.charAt(0)=='+') {
@@ -91,12 +92,14 @@ public class Polynom implements Polynom_able{
 	 */
 	@Override
 	public void add(Polynom_able p1)  throws Exception {
-		// The iterator help us to go through the Polynom
-		Iterator<Monom> p_iter=p1.iteretor();
-		//While the other Polynom has Monoms add them to this Polynom
-		while (p_iter.hasNext() ) {
-			Monom current=p_iter.next();
-			this.add(current);
+		if (p1!=null) {
+			// The iterator help us to go through the Polynom
+			Iterator<Monom> p_iter=p1.iteretor();
+			//While the other Polynom has Monoms add them to this Polynom
+			while (p_iter.hasNext() ) {
+				Monom current=p_iter.next();
+				this.add(current);
+			}
 		}
 	}
 
@@ -270,8 +273,8 @@ public class Polynom implements Polynom_able{
 	 * for f(x) smaller than eps),
 	 * assuming that(f(x0)*f(x1)) smaller or equal to 0, returns f(x2) such that:
 	 * (i) x0 bigger or equal to x1 bigger or equal to x2 and (ii) f(x2) smaller than eps
-	 * @param x0 starting point
-	 * @param x1 end point
+	 * @param x0 starting point of the range
+	 * @param x1 ending point point of the range
 	 * @param eps step (positive) value
 	 * @throws Exception if epsilon is negative number
 	 * @throws Exception if the range is invalid
@@ -348,6 +351,8 @@ public class Polynom implements Polynom_able{
 	/**
 	 * Compute Riemann's Integral over this Polynom starting from x0, till x1 using eps size steps,
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
+	 * @param x0 starting point of the range
+	 * @param x1 ending point point of the range
 	 * @return the approximated area above the x-axis below this Polynom and between the [x0,x1] range.
 	 * @throws Exception if epsilon is negative number
 	 * @throws Exception if the range is invalid
@@ -355,16 +360,19 @@ public class Polynom implements Polynom_able{
 	 */
 	@Override
 	public double area(double x0,double x1, double eps) throws Exception {
-		boolean flag=false;
-		double x;
-		// Checks if the Polynom cuts the X-axis
-		for (double i=x0; i<=x1; i+=0.001) {
-			if (this.f(i)==0) {
-				flag=true;
-			}
-		}
+		return underArea(x0, x1,eps)+aboveArea(x0,x1,eps);
+	}
+
+	/**
+	 * Auxiliary function the calculates the area if its under the X-axis
+	 * @param x0 starting point of the range
+	 * @param x1 ending point point of the range
+	 * @return the approximated area under the x-axis above this Polynom and between the [x0,x1] range.
+	 * @throws Exception if there is no cutting point with the X-axis
+	 */
+	public double underArea(double x0,double x1, double eps) throws Exception {
 		// Throw exception if the Polynom don't cuts the X-axis
-		if (flag)
+		if (!xaxis(x0,x1,eps))
 			throw new Exception("There is no cutting point with the X-axis");
 		// Epsilon can't be a negative number or equal to 0 
 		else if (eps<=0)
@@ -379,26 +387,63 @@ public class Polynom implements Polynom_able{
 			for (int i=1; i<=n; i++) {
 				double xi=x0+eps*(i-1);
 				// Calculate the value of x in the i place
-				double f=this.f(xi);
-				if(f >0) 
-					sum=sum+f;	
-				else 
-					sum=sum+negativeArea(f);
+				double f=this.f(xi); 
+				if (f<0)
+				sum=sum+f;
+			}
+			return Math.abs(sum*eps);
+		}
+	}
+	/**
+	 * Auxiliary function the calculates the area if its above the X-axis
+	 * @param x0 starting point of the range
+	 * @param x1 ending point point of the range
+	 * @param eps the size of steps
+	 * @return the approximated area above the x-axis under this Polynom and between the [x0,x1] range.
+	 * @throws Exception if there is no cutting point with the X-axis
+	 */
+	public double aboveArea(double x0,double x1, double eps) throws Exception {
+		
+		// Throw exception if the Polynom don't cuts the X-axis
+		if (!xaxis(x0,x1,eps))
+			throw new Exception("There is no cutting point with the X-axis");
+		// Epsilon can't be a negative number or equal to 0 
+		else if (eps<=0)
+			throw new Exception("eps need to be bigger than zero");
+		// x0 can't be bigger than x1
+		else if (x0>x1)
+			throw new Exception("x1 should be bigger than x0");
+		else {
+			int n=(int)((x1-x0)/eps);
+			double sum=0;
+			for (int i=1; i<=n; i++) {
+				double xi=x0+eps*(i-1);
+				// Calculate the value of x in the i place
+				double f=this.f(xi); 
+				if (f>0)
+				sum=sum+f;
 			}
 			return sum*eps;
 		}
 	}
-
 	/**
-	 * Auxiliary function the calculates the area if its under the X-axis
-	 * @param f the negative value of the area
-	 * @return the approximated area under the x-axis under this Polynom and between the [x0,x1] range.
-	 * @throws Exception if there is no cutting point with the X-axis
+	 * This method check if there is no cutting point with the X-axis
+	 * @param x0 starting point of the range
+	 * @param x1 ending point point of the range
+	 * @param eps the size of steps
+	 * @return true: Polynom cut the X-axis false: Polynom don't cut the X-axis
+	 * @throws Exception
 	 */
-	public double negativeArea(double f) throws Exception{
-		return Math.abs(f);
+	public boolean xaxis(double x0,double x1,double eps) throws Exception {
+		boolean flag=false;
+		// Checks if the Polynom cuts the X-axis
+		for (double i=x0; i<=x1; i+=0.001) {
+			if (Math.floor(this.f(i)*100)/100==0) {
+				flag=true;
+			}
+		}
+		return flag;
 	}
-
 	/**
 	 * This method help us to go through the Polynom
 	 * @return Iterator
@@ -431,7 +476,19 @@ public class Polynom implements Polynom_able{
 			return polynom;
 		}
 	}
-
+	/**
+	 * This method is used for build a new plot.
+	 * Given a Polynom and range the method drew a new plot
+	 * @param x1 the starting point of the range
+	 * @param x2 the ending point of the range
+	 * @throws Exception if the user build a invalid Polynom
+	 * @throws Exception if x1 is bigger than x2 (invalid range) 
+	 */
+	public void toPlot(double x1, double x2) throws Exception{
+		Polynom toplot=new Polynom(this.toString());
+		Plot plot=new Plot(toplot,x1,x2);
+		plot.setVisible(true);
+	}
 	/** 
 	 * This method get a real number and calculates the Polynom value
 	 * @param x the value of the number
@@ -468,6 +525,3 @@ public class Polynom implements Polynom_able{
 	}
 
 }
-
-
-
