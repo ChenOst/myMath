@@ -2,6 +2,7 @@ Ex1- ReadMe
 Chen Ostrovski - 316402650
 Ester Reznikov – 315674028
 This project was done as part of assignment number 0. In this project we will implement two different classes:  “Polynom” (collection of Monoms) and “Monom”. The two classes contain Constructor and Methods which help us to do different actions on the objects.
+
 Momon:
 This class helps us to build objects from the type “Monom” (a*x^b). The Monom is made up of: ‘a’ is a double that represents the coefficient (can be any number) and ‘b’ is an integer (must be bigger or equal to zero) that represents the power. The class Monom implements from the interface “function” that contain only one function called “f” (see below for details). In the class Monom the user can see how different mathematical functions influencing the Monom. The methods can only be done on Monoms with the same power.
 The user can build new Monoms with the help of the Constructors. Each Constructor is unique and helps us in different ways to build our Monom.
@@ -11,18 +12,17 @@ Copy Constructor: copying the values of existing Monom. Set the values in the co
 String Constructor: get a String and converts it into numbers. Proper input: a*x^b. Putting another input might cause the program to stop working. For example inputs that contain letters of the alphabet will cause the program to send error. The function throws exception if the Polynom contains invalid signs or if the Polynom equals to null. 
 The Monom class contains different mathematical functions each in its own way affects the Monom and allows doing different calculations on it.
 F: function from the interface. In this function the user puts a value of any number (represented by ‘x’) and the function calculates the value of the Monom in this number.  
-
 Add: add two Monoms one with the other. Only if both of the Monoms have the same power the function can add them together, or if one of the Monoms equal to zero Monom it can add it to Monom that don’t equal to zero. The function adds the two coefficients together and the power value stays the same. The function throws exception if the Monoms have different power value.
 Multiply: multiply two Monoms. The function multiplies the two coefficients one with the other and add the powers together. The function throws exception if the power of the Monom is lower than zero.
 Derivative: derivative this Monom, It takes Monom and changes it to derivative version. The function multiplies the coefficient by power and then subtracts the power by one. If the power is equal to zero the function return zero. The function throws exception if the power of the Monom is lower than zero
 Subtract: subtract two Monom one with the other. Only if both of the Monoms have the same power the function can subtract them. The function subtracts the two coefficients together and the power value stays the same. The function throws exception if the power of the Monom is lower than zero or if the Monoms have a different power value.
 ToString: prints the Monom. This function gets a Monom and prints its coefficient and power values, the function would print different Strings that depend on the values of the coefficient and power. If the coefficient is a negative number the function would print “()” around the coefficient. If the coefficient is equal to one the function wouldn’t print “1” and will print only “x” and the power. If the coefficient is equal to zero the function would print “0”. If the power is equal to one the function wouldn’t print “1” and will print only the coefficient and “x”. If the power is equal to zero the function wouldn’t print “0” and will a free number and if none of the above the function will print a regular Monom “a*x^b”.
+
 Polynom:
 Polynom is an ArrayList of Monoms. This class helps us to build objects from the type “Polynom” (f(x) = a_1*x^b_1 + a_2*x^b_2 + … + a_n*x^b_n). Every Monom contain the qualities given to him from the class Monom. The class Polynom implements from the interface “Polynom_able” that contain several function. ). In the class Polynom the user can see how different mathematical functions influencing the Polynom. The methods can be done on Monoms with different power.
 The user can build new Polynoms with the help of the Constructors. Each Constructor is unique and helps us in different ways to build our Polynom.
 Zero Constructor: build a new empty Polynom.
 Copy Constructor: copying the values of existing Polynom. Set the values of the Monoms in the copied Polynom. This function use the constructor and add method from the Monom class, it throws exception if the Monoms in the Polynom contain invalid values. 
-
 String Constructor: get a String and converts it into numbers. Proper input: f(x) = a_1*x^b_1 + a_2*x^b_2 + … + a_n*x^b_n. Putting another input might cause the program to stop working. For example inputs that contain letters of the alphabet will cause the program to send error. This function make split on the plus (“ + “) divides the String into different Monoms. The function uses “add” fuction of the Monom and the “String Construcrot” of the Monom. The function throws exception if the Polynom contains invalid signs or if the Polynom equals to null.
 The Polynom class contains different mathematical functions each in its own way affects the Polynom and allows doing different calculations on it.
 Add Monom:  add Monom to a Polynom. The function checks if the Polynom contain a Monom with the same power as the Monom that we want to add. If it contains the function add those Monoms together, if this doesn’t it add the Monom in the end of the Polynom. In the end of the function we send the Polynom to the function “Remove zero” to check if it contain zero and to sort and Polynom. The function throws exception if the power of one of the Monoms is lower than zero.
@@ -41,11 +41,15 @@ UnderArea: auxiliary function designed to calculate the approximated area under 
 Xaxis: auxiliary function tha used in UnderArea and AboveArea. The function helps the user to check if the Polynom cuts the X axis. The function throws exception if the Polynom doesn’t cut the X axis.
 Iterator:  help the user to go over the ArrayList.
 ToString: prints the Polynom. This function gets all the Monoms in the Polynom and prints the coefficient and power values, the function would print different Strings that depend on the values of the coefficient and power. The function uses the function “ToString” from the Monom and prints all the different possibilities that were mention before. 
+ToPlot: builds a new plot. Given a Polynom and range the function draws a new plot. This function throws exception if epsilon is negative number or if x0 is bigger than x1.
 F: in this function the user puts a value of any number (represented by ‘x’) and the function calculates the value of the Polynom in this number. This function throws exception if the Polynom equal to null or if the power of one of the Monoms is lower than zero.
 RemoveZero: remove zero Monom from the Polynom. This function remove from the Polynom Monoms that their coefficient is equal to zero. Also this function is sorting the Polynom, sorting from the biggest to lowest power. 
+
 Monom Comperator:
 This class compares between two Monoms and help the user to sort the Polynom by the size of the power.
 Plot:
 This class represents the library “Gral”. This code was taken from the site: https://github.com/eseifert/gral and was adapted to our needs.  The class accepts Polynom, draws it and marks the min and max points of the Polynom. The user has to use frame.setVisible(true); in order to see the plot. The class contains only one constructor, this constructor build the Plot. 
-Plot constructor: This method builds a new plot. It accepts Polynom (represented by polynom) and range (represented by x1 and x2). The method will search in the range for the min and max points. x1 has to be smaller than x2, else the method will throw exception. Given a Polynom we will mark it in blue, and after finding the min and max points we will mark them in black. The calculation of the points will be done by using the function "root" from the Polynom class. The user has to use frame.setVisible(true); in order to see the plot. The constructor throw exception if the range is invalid (x1 is bigger than x2).
+
+Plot constructor:
+This method builds a new plot. It accepts Polynom (represented by polynom) and range (represented by x1 and x2). The method will search in the range for the min and max points. x1 has to be smaller than x2, else the method will throw exception. Given a Polynom we will mark it in blue, and after finding the min and max points we will mark them in black. The calculation of the points will be done by using the function "root" from the Polynom class. The user has to use frame.setVisible(true); in order to see the plot. The constructor throw exception if the range is invalid (x1 is bigger than x2).
 
