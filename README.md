@@ -2,11 +2,9 @@
 
 Chen Ostrovski
 Ester Reznikov
-This project was done as part of assignment given at class. In this project we will implement two different classes:  “Polynom” (collection of Monoms) and “Monom”. The two classes contain Constructor and Methods which help us to do different actions on the objects.
 
-##Monom
-
-This class helps us to build objects from the type “Monom” (a*x^b). The Monom is made up of: ‘a’ is a double that represents the coefficient (can be any number) and ‘b’ is an integer (must be bigger or equal to zero) that represents the power. This class contains multiple mathematical functions: add, subtract, multiply, division and more, it also contains functions that compare and checks the Monon value. This class is the base of the Polynom class.
+This project was done as part of assignment given at class. In this project we will implement two different classes: “Polynom” (collection of Monoms) and “Monom”. The two classes contain Constructor and Methods which help us to do different actions on the objects.
+##MonomThis class helps us to build objects from the type “Monom” (a*x^b). The Monom is made up of: ‘a’ is a double that represents the coefficient (can be any number) and ‘b’ is an integer (must be bigger or equal to zero) that represents the power. This class contains multiple mathematical functions: add, subtract, multiply, division and more, it also contains functions that compare and checks the Monon value. This class is the base of the Polynom class.
 
 ##Polynom
 Polynom is an ArrayList of Monoms. This class helps us to build objects from the type “Polynom” (f(x) = a_1*x^b_1 + a_2*x^b_2 + … + a_n*x^b_n). Every Monom contain the qualities given to him from the class Monom. In the class Polynom the user can see how different mathematical functions influencing the Polynom. The methods can be done on Monoms with different power. This class contains all the methods from the Monom class and it combines actions that can be done between Monom and Polynom and between two Polynoms.
